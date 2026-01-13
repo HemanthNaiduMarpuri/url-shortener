@@ -58,5 +58,3 @@ A modern, secure, and scalable **URL Shortener** built with **Django**, featurin
 
 ---
 
-## 📁 Project Structure
-
