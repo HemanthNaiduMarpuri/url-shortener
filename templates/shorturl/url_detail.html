@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}URL Details{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow p-6 space-y-6">
+
+  <h2 class="text-2xl font-bold text-center">URL Details</h2>
+
+  <div>
+    <p class="text-sm text-gray-500">Short URL</p>
+    <div class="flex gap-2 mt-1">
+      <input id="shortUrl"
+             value="{{ request.scheme }}://{{ request.get_host }}/{{ url.short_key }}"
+             readonly
+             class="flex-1 px-3 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600">
+
+      <button onclick="copyShortUrl()"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+        Copy
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <p class="text-sm text-gray-500">Original URL</p>
+    <p class="break-all text-sm mt-1 text-gray-700 dark:text-gray-300">
+      {{ url.long_url }}
+    </p>
+  </div>
+
+  <div class="text-sm text-gray-500 space-y-1">
+    <p>Clicks: {{ url.click_count }}</p>
+    <p>Created: {{ url.created_at }}</p>
+    {% if url.expires_at %}
+      <p>Expires: {{ url.expires_at }}</p>
+    {% endif %}
+  </div>
+
+</div>
+
+<script>
+  function copyShortUrl() {
+    const input = document.getElementById("shortUrl");
+    input.select();
+    document.execCommand("copy");
+  }
+</script>
+{% endblock %}

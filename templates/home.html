@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center space-y-8">
+  <h1 class="text-3xl sm:text-4xl font-extrabold">
+    Shorten links.<br class="sm:hidden"> Share smarter.
+  </h1>
+
+  <p class="text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
+    Create short, secure, and fast URLs with built-in expiry and analytics.
+  </p>
+
+  <div>
+    <a href="/short_url/create/"
+       class="inline-block w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
+      Create Short URL
+    </a>
+  </div>
+</div>
+{% endblock %}

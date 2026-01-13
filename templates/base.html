@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}URL Shortener{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+
+<nav class="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="/" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+      🔗 URL Shortener
+    </a>
+
+    <div class="flex items-center gap-3 text-sm">
+      {% if user.is_authenticated %}
+        <a href="/short_url/create/" class="hover:text-indigo-600">
+          Create
+        </a>
+
+        <a href="{% url 'user_urls' %}" class="hover:text-indigo-600">
+          My URLs
+        </a>
+
+        <a href="/auth/logout/" class="hover:text-red-500">
+          Logout
+        </a>
+      {% else %}
+        <a href="/auth/login/" class="hover:text-indigo-600">Login</a>
+        <a href="/auth/signup/" class="hover:text-indigo-600">Signup</a>
+      {% endif %}
+
+      <button onclick="toggleDarkMode()"
+              class="ml-2 px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">
+            <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="text-center py-4 text-xs text-gray-500 dark:text-gray-400">
+  © {{ now|date:"Y" }} URL Shortener • Django
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const icon = document.getElementById("themeIcon");
+
+  function updateIcon() {
+    if (root.classList.contains("dark")) {
+      icon.textContent = "🌙";
+    } else {
+      icon.textContent = "☀️";
+    }
+  }
+
+  function toggleDarkMode() {
+    root.classList.toggle("dark");
+    const theme = root.classList.contains("dark") ? "dark" : "light";
+    localStorage.setItem("theme", theme);
+    updateIcon();
+  }
+
+  if (localStorage.getItem("theme") === "dark") {
+    root.classList.add("dark");
+  }
+
+  updateIcon();
+
+  document
+    .getElementById("themeToggle")
+    .addEventListener("click", toggleDarkMode);
+</script>
+
+
+</body>
+</html>
