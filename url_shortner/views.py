@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest, HttpResponseGone, JsonResponse
@@ -102,7 +103,8 @@ def user_url_detail(request, url_id):
     )
 
     context = {
-        'url':url
+        'url':url,
+        'now': timezone.now()
     }
 
     return render(request, 'shorturl/url_detail.html', context)

@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.urls import include, path
 from url_shortner.views import redirect_url
 from .views import homeview
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homeview, name='home'),
     path('auth/', include('url_users.urls')),
     path('short_url/', include('url_shortner.urls')),
-    path('<str:short_key>/', redirect_url, name='redirect_url')
+    path('<str:short_key>/', redirect_url, name='redirect_url'),
+    path('qrcode/', include('url_qr.urls'))
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

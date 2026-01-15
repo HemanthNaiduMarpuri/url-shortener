@@ -1,47 +1,84 @@
 {% extends "base.html" %}
-{% block title %}Create{% endblock %}
+{% block title %}Create Short URL{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow p-6 space-y-6">
-  <h2 class="text-2xl font-bold text-center">Create Short URL</h2>
 
-  <form method="POST" class="space-y-4">
-    {% csrf_token %}
-    <input type="url" name="long_url" placeholder="https://example.com"
-      class="w-full px-4 py-3 rounded-xl border dark:bg-gray-700 dark:border-gray-600" required>
+<div class="max-w-xl mx-auto space-y-6">
 
-    <button class="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
-      Generate
-    </button>
-  </form>
+  <div class="text-center">
+    <h2 class="text-2xl font-bold text-gray-800 ">
+      Create Short URL
+    </h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Paste a long URL and get a shareable short link
+    </p>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
+
+    <form method="POST" class="space-y-4">
+      {% csrf_token %}
+
+      <input
+        type="url"
+        name="long_url"
+        placeholder="https://example.com"
+        required
+        class="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-indigo-500 focus:outline-none
+               dark:bg-gray-700 dark:border-gray-600"
+      >
+
+      <button
+        type="submit"
+        class="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+        Generate Short URL
+      </button>
+    </form>
+
+  </div>
 
   {% if short_url %}
-  <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl space-y-2">
-    <p class="font-semibold">Your short link</p>
+  <!-- Result -->
+  <div class="bg-gray-100 dark:bg-gray-700 rounded-2xl p-5 space-y-3">
+
+    <p class="font-semibold text-gray-700 dark:text-gray-200">
+      Your short link
+    </p>
 
     <div class="flex flex-col sm:flex-row gap-2">
-      <input id="shortUrlInput" value="{{ short_url }}" readonly
-        class="flex-1 px-3 py-2 rounded-lg border dark:bg-gray-800 dark:border-gray-600">
+      <input
+        id="shortUrlInput"
+        value="{{ short_url }}"
+        readonly
+        class="flex-1 px-4 py-2 rounded-lg border dark:bg-gray-800 dark:border-gray-600"
+      >
 
-      <button onclick="copyUrl()"
-        class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+      <button
+        onclick="copyUrl()"
+        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
         Copy
       </button>
     </div>
 
-    <p id="copyMsg" class="hidden text-sm text-green-500">Copied!</p>
+    <p id="copyMsg" class="hidden text-sm text-green-500">
+      Copied to clipboard ✔
+    </p>
+
   </div>
   {% endif %}
+
 </div>
 
 <script>
-  function copyUrl() {
-    const input = document.getElementById("shortUrlInput");
-    input.select();
-    document.execCommand("copy");
+function copyUrl() {
+  const text = document.getElementById("shortUrlInput").value;
+
+  navigator.clipboard.writeText(text).then(() => {
     const msg = document.getElementById("copyMsg");
     msg.classList.remove("hidden");
     setTimeout(() => msg.classList.add("hidden"), 1500);
-  }
+  });
+}
 </script>
+
 {% endblock %}

@@ -42,9 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'url_shortner',
-    'url_users'
+    'url_users',
+    'url_qr',
+    "crispy_forms",
+    "crispy_tailwind",
 ]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -135,5 +140,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+LOGOUT_REDIRECT_URL = 'home/'
 
 AUTH_USER_MODEL = 'url_users.Users'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"

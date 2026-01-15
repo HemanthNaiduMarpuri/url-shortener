@@ -1,48 +1,88 @@
 {% extends "base.html" %}
 {% block title %}URL Details{% endblock %}
-
 {% block content %}
-<div class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow p-6 space-y-6">
 
-  <h2 class="text-2xl font-bold text-center">URL Details</h2>
+<div class="max-w-3xl mx-auto space-y-6">
 
-  <div>
-    <p class="text-sm text-gray-500">Short URL</p>
-    <div class="flex gap-2 mt-1">
-      <input id="shortUrl"
-             value="{{ request.scheme }}://{{ request.get_host }}/{{ url.short_key }}"
-             readonly
-             class="flex-1 px-3 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600">
-
-      <button onclick="copyShortUrl()"
-              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-        Copy
-      </button>
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">URL Details</h2>
+      <p class="text-sm text-gray-500">
+        Manage and track your shortened link
+      </p>
     </div>
+
+    <a href="{% url 'user_urls' %}" class="text-sm text-indigo-600 hover:underline">
+      ← Back to URLs
+    </a>
   </div>
 
-  <div>
-    <p class="text-sm text-gray-500">Original URL</p>
-    <p class="break-all text-sm mt-1 text-gray-700 dark:text-gray-300">
-      {{ url.long_url }}
-    </p>
+  <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
+
+    <div>
+      <p class="text-sm text-gray-500">Short URL</p>
+      <div class="flex gap-2 mt-1">
+        <input id="shortUrl" readonly
+               value="{{ request.scheme }}://{{ request.get_host }}/{{ url.short_key }}"
+               class="flex-1 px-4 py-3 rounded-xl border">
+
+        <button onclick="copyShortUrl()"
+                class="px-4 py-3 bg-indigo-600 text-white rounded-xl">
+          Copy
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-sm text-gray-500">Original URL</p>
+      <p class="break-all">{{ url.long_url }}</p>
+    </div>
+
   </div>
 
-  <div class="text-sm text-gray-500 space-y-1">
-    <p>Clicks: {{ url.click_count }}</p>
-    <p>Created: {{ url.created_at }}</p>
-    {% if url.expires_at %}
-      <p>Expires: {{ url.expires_at }}</p>
-    {% endif %}
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+    <div class="bg-white rounded-xl p-4 text-center shadow-sm">
+      <p class="text-sm text-gray-500">Clicks</p>
+      <p class="text-2xl font-bold">{{ url.click_count }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl p-4 text-center shadow-sm">
+      <p class="text-sm text-gray-500">Created</p>
+      <p>{{ url.created_at|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl p-4 text-center shadow-sm">
+      <p class="text-sm text-gray-500">Status</p>
+      {% if url.is_expired %}
+        <span class="px-3 py-1 text-sm bg-red-100 text-red-600 rounded-full">
+          Expired
+        </span>
+      {% else %}
+        <span class="px-3 py-1 text-sm bg-green-100 text-green-600 rounded-full">
+          Active
+        </span>
+      {% endif %}
+    </div>
+
   </div>
 
 </div>
 
 <script>
-  function copyShortUrl() {
-    const input = document.getElementById("shortUrl");
-    input.select();
+function copyShortUrl() {
+  const text = document.getElementById("shortUrl").value;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const temp = document.createElement("input");
+    temp.value = text;
+    document.body.appendChild(temp);
+    temp.select();
     document.execCommand("copy");
+    document.body.removeChild(temp);
   }
+}
 </script>
+
 {% endblock %}
